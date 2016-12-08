@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 public class MyListAdapter extends BaseExpandableListAdapter {
@@ -102,6 +103,35 @@ public class MyListAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
+
+    public View getChildView(ExpandableListView listView, int pos) {
+        return listView.getChildAt(pos);
+    }
+
+    public int selectData(String query) {
+        int posEnv = 0;
+        int posAni = 0;
+
+        query = query.toLowerCase();
+        for (Environment environment : originalList) {
+            posEnv++;
+            ArrayList<Animal> animalList = environment.getAnimalList();
+            for (Animal animal : animalList) {
+                posAni++;
+                if (animal.getName().toLowerCase().contains(query)) {
+                    Log.d("ANIMAL", animal.getName() + "    position " + posEnv + ", " + posAni);
+                    if (posEnv == 1) {
+                        return (posAni);
+                    } else {
+                        return (posEnv  + posAni -1);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
+
 
     public void filterData(String query){
 
