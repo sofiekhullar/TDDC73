@@ -1,15 +1,18 @@
 package sofie.tddc73_lab2;
 
 import android.graphics.Color;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import java.util.ArrayList;
 import android.app.Activity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 public class Main2Activity extends Activity {
 
@@ -18,6 +21,8 @@ public class Main2Activity extends Activity {
     private ExpandableListView myList;
     private ArrayList<Environment> environmentList = new ArrayList<>();
     private ArrayList<Animal> animalList = new ArrayList<>();
+    private boolean clicked = true;
+    int index = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,62 +38,116 @@ public class Main2Activity extends Activity {
         search.setText("/");
         search.setSelection(1);
 
+        search.setClickable(true);
+
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clearColor();
+                clicked = false;
             }
-
         });
 
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
                 expandAll();
-                if (search.getText().length() != 0) {
-                    String tmp = search.getText().toString().substring(1);
-                    if (tmp.contains("/")) {
-                        String[] parts = tmp.split("/");
-                        if (parts.length > 1) {
-                            tmp = parts[1];
-                        }
-                    }
-                    int pos = listAdapter.selectData(tmp);
-                    clearColor();
-
-                    Log.d("ANIMAL POS", String.valueOf(pos));
-                    if(pos > 0 && pos <=10){
-                        View childView = listAdapter.getChildView(myList, pos);
-                        childView.setBackgroundColor(Color.rgb(214, 214, 214));
-                    }
-                }
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int arg1, int arg2, int arg3) {
-
             }
 
             @Override
             public void afterTextChanged(Editable arg0) {
-                if (search.getText().length() == 0){
+                Log.d("Clicked", String.valueOf(clicked));
+
+
+                if (search.getText().length() == 0) {
                     search.setText("/");
                     search.setSelection(1);
                 }
-                if (search.getText().length() == 1){
-                    clearColor();
+
+                if (search.getText().length() == 1) {
+                    myList.clearChoices();
+                    listAdapter.notifyDataSetChanged();
+                    myList.setItemChecked(index, false);
+                    Log.d("Remove selector", "Ska göras här");
+
+                    index = myList.getFlatListPosition(ExpandableListView.getPackedPositionForChild(0, 2));
+                    myList.setItemChecked(index, true);
+
+                }
+
+                if (!clicked) {
+                    myList.clearChoices();
+                    listAdapter.notifyDataSetChanged();
+
+                    if (search.getText().length() == 0) {
+                        search.setText("/");
+                        search.setSelection(1);
+                    }
+
+                    String input = search.getText().toString().substring(1);
+                    String environment = input;
+                    String animal = "";
+                    int groupPos;
+                    boolean findEnvironment = false;
+                    boolean findAnimal = false;
+
+
+                    if (input.contains("/")) {
+                        String[] parts = input.split("/");
+                        environment = parts[0];
+                        if (parts.length > 1) {
+                            environment = parts[0];
+                            animal = parts[1];
+                            Log.d("input ", animal + " heading " + parts[0]);
+                        }
+                    }
+
+                    for (int i = 0; i < listAdapter.getGroupCount(); i++) {
+                        Environment environmentGroup = environmentList.get(i);
+
+                        if (environmentGroup.getName().startsWith(environment)) {
+                            groupPos = environmentList.indexOf(environmentGroup);
+                            search.setBackgroundColor(Color.TRANSPARENT);
+                            findEnvironment = true;
+
+                            for (int j = 0; j < environmentGroup.getAnimalList().size(); j++) {
+                                Animal animalChild = environmentGroup.getAnimalList().get(j);
+
+                                //Log.d("children ", animalChild.getName() + "==" + animal + "    i,j: " + i + ","+ j );
+
+                                if (animalChild.getName().startsWith(animal) && !animal.equals("")) {
+                                    search.setBackgroundColor(Color.TRANSPARENT);
+                                    //int index = myList.getFlatListPosition(ExpandableListView.getPackedPositionForChild(i, j));
+                                    //myList.setItemChecked(index, true);
+
+                                    findAnimal = true;
+                                    collapseAll(groupPos);
+
+                                    if (animal.contains(animalChild.getName())) {
+                                        index = myList.getFlatListPosition(ExpandableListView.getPackedPositionForChild(i, j));
+                                        myList.setItemChecked(index, true);
+                                    }
+                                }
+                            }
+                        }
+                        if (!findAnimal && !animal.equals("")) {
+                            search.setBackgroundColor(android.graphics.Color.RED);
+                            myList.setItemChecked(index, false);
+                        }
+                        if (!findEnvironment && !environment.equals("")) {
+                            search.setBackgroundColor(android.graphics.Color.RED);
+                            myList.setItemChecked(index, false);
+                        }
+                    }
                 }
             }
         });
+        clicked = false;
     }
 
-    private void clearColor(){
-        int size = (listAdapter.getChildrenCount(0) + listAdapter.getChildrenCount(1) + listAdapter.getGroupCount());
-        for(int i = 0; i < size; i++){
-            View viewTmp = listAdapter.getChildView(myList, i);
-            viewTmp.setBackgroundColor(Color.TRANSPARENT);
-        }
-    }
 
     //method to expand all groups
     private void expandAll() {
@@ -97,6 +156,15 @@ public class Main2Activity extends Activity {
             myList.expandGroup(i);
         }
     }
+
+    //method to collapse all groups
+    private void collapseAll(int skip) {
+        int count = listAdapter.getGroupCount();
+        for (int i = 0; i < count; i++){
+            if(i != skip) myList.collapseGroup(i);
+        }
+    }
+
 
     //method to expand all groups
     private void displayList() {
@@ -111,25 +179,41 @@ public class Main2Activity extends Activity {
         //attach the adapter to the list
         myList.setAdapter(listAdapter);
 
-
         // Listview on child click listener
         myList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            View lastColored;
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
 
-                if(lastColored != null)
-                {
-                    lastColored.setBackgroundColor(Color.TRANSPARENT);
-                    lastColored.invalidate();
-                }
-                lastColored = v;
-                v.setBackgroundColor(Color.rgb(214, 214, 214));
+                expandAll();
+                clicked = true;
+                //get the group header
+                Environment enviromentGroup = environmentList.get(groupPosition);
+                //get the child info
+                Animal animalChild = enviromentGroup.getAnimalList().get(childPosition);
+                // Set the search way
+                search.setText("/" + enviromentGroup.getName() + "/" + animalChild.getName());
+                search.setSelection(search.getText().length());
 
-                search.setText("/" + environmentList.get(groupPosition).getName() + "/" + environmentList.get(groupPosition).getAnimalList().get(childPosition).getName());
-                search.setSelection(search.getText().toString().length());
+                int index = parent.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition));
+                parent.setItemChecked(index, true);
+
                 return false;
+            }
+        });
+
+        myList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                expandAll();
+                clicked = true;
+                //get the group header
+                Environment enviromentGroup = environmentList.get(groupPosition);
+                search.setText("/" + enviromentGroup.getName() + "/");
+                search.setSelection(search.getText().length());
+
+
+                return true;
             }
         });
     }
