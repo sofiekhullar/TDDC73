@@ -1,145 +1,231 @@
 package sofie.tddc73_lab2;
 
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
 import android.os.Bundle;
+import java.util.ArrayList;
+import android.app.Activity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+public class MainActivity extends Activity {
 
-public class MainActivity extends AppCompatActivity {
-
-    ExpandableListAdapter listAdapter;
-    ExpandableListView expListView;
-    EditText searchText;
-    List<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
+    private EditText search;
+    private MyListAdapter listAdapter;
+    private ExpandableListView myList;
+    private ArrayList<Environment> environmentList = new ArrayList<>();
+    private ArrayList<Animal> animalList = new ArrayList<>();
+    private boolean clicked = false;
+    int index = 0;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // get the listview
-        expListView = (ExpandableListView) findViewById(R.id.expandableListView);
-        searchText = (EditText) findViewById(R.id.searchText);
+        search = (EditText) findViewById(R.id.searchText);
+        //display the list
+        displayList();
+        //expand all Groups
+        expandAll();
 
-        // preparing list data
-        prepareListData();
+        search.setText("/");
+        search.setSelection(1);
+        search.setClickable(true);
 
-        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clicked = true;
+            }
+        });
 
-        // setting list adapter
-        expListView.setAdapter(listAdapter);
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                expandAll();
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int arg1, int arg2, int arg3) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                if (search.getText().length() == 0) {
+                    search.setText("/");
+                    search.setSelection(1);
+                }
+
+                if (search.getText().length() == 1) {
+                    myList.setItemChecked(index, false);
+                }
+
+                if (clicked) {
+                    if (search.getText().length() == 0) {
+                        search.setText("/");
+                        search.setSelection(1);
+                    }
+
+                    String input = search.getText().toString().substring(1);
+                    String environment = input;
+                    String animal = "";
+                    int groupPos;
+                    boolean findEnvironment = false;
+                    boolean findAnimal = false;
+
+
+                    if (input.contains("/")) {
+                        String[] parts = input.split("/");
+                        environment = parts[0];
+                        if (parts.length > 1) {
+                            environment = parts[0];
+                            animal = parts[1];
+                            Log.d("input ", animal + " heading " + parts[0]);
+                        }
+                    }
+
+                    for (int i = 0; i < listAdapter.getGroupCount(); i++) {
+                        Environment environmentGroup = environmentList.get(i);
+
+                        if (environmentGroup.getName().startsWith(environment)) {
+                            groupPos = environmentList.indexOf(environmentGroup);
+                            search.setBackgroundColor(Color.TRANSPARENT);
+                            findEnvironment = true;
+
+                            for (int j = 0; j < environmentGroup.getAnimalList().size(); j++) {
+                                Animal animalChild = environmentGroup.getAnimalList().get(j);
+
+                                if (animalChild.getName().startsWith(animal) && !animal.equals("")) {
+                                    search.setBackgroundColor(Color.TRANSPARENT);
+
+                                    findAnimal = true;
+                                    collapseAll(groupPos);
+                                    index = myList.getFlatListPosition(ExpandableListView.getPackedPositionForChild(i, j));
+                                    myList.setItemChecked(index, true);
+
+
+                                    if (animal.contains(animalChild.getName())) {
+                                        index = myList.getFlatListPosition(ExpandableListView.getPackedPositionForChild(i, j));
+                                        myList.setItemChecked(index, true);
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                        if (!findAnimal && !animal.equals("")) {
+                            search.setBackgroundColor(android.graphics.Color.RED);
+                            myList.setItemChecked(index, false);
+                        }
+                        if (!findEnvironment && !environment.equals("")) {
+                            search.setBackgroundColor(android.graphics.Color.RED);
+                            myList.setItemChecked(index, false);
+                        }
+                    }
+                }
+            }
+        });
+        clicked = false;
+    }
+
+
+    //method to expand all groups
+    private void expandAll() {
+        int count = listAdapter.getGroupCount();
+        for (int i = 0; i < count; i++) {
+            myList.expandGroup(i);
+        }
+    }
+
+    //method to collapse all groups
+    private void collapseAll(int skip) {
+        int count = listAdapter.getGroupCount();
+        for (int i = 0; i < count; i++){
+            if(i != skip) myList.collapseGroup(i);
+        }
+    }
+
+
+    //method to expand all groups
+    private void displayList() {
+
+        //display the list
+        loadSomeData();
+
+        //get reference to the ExpandableListView
+        myList = (ExpandableListView) findViewById(R.id.expandableListView);
+        //create the adapter by passing your ArrayList data
+        listAdapter = new MyListAdapter(MainActivity.this, environmentList);
+        //attach the adapter to the list
+        myList.setAdapter(listAdapter);
 
         // Listview on child click listener
-        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-
+        myList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                Toast.makeText(
-                        getApplicationContext(),
-                        listDataHeader.get(groupPosition)
-                                + " : "
-                                + listDataChild.get(
-                                listDataHeader.get(groupPosition)).get(
-                                childPosition), Toast.LENGTH_SHORT)
-                        .show();
 
-                searchText.setText("/" + listDataHeader.get(groupPosition) + "/" +
-                        listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition));
+                expandAll();
+                clicked = true;
+                //get the group header
+                Environment enviromentGroup = environmentList.get(groupPosition);
+                //get the child info
+                Animal animalChild = enviromentGroup.getAnimalList().get(childPosition);
+                // Set the search way
+                search.setText("/" + enviromentGroup.getName() + "/" + animalChild.getName());
+                search.setSelection(search.getText().length());
+
+                int index = parent.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition));
+                parent.setItemChecked(index, true);
 
                 return false;
             }
         });
 
-        // Listview Group expanded listener
-        expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-
+        myList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
-            public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        listDataHeader.get(groupPosition) + " Expanded",
-                        Toast.LENGTH_SHORT).show();
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                expandAll();
+                clicked = true;
+                //get the group header
+                Environment enviromentGroup = environmentList.get(groupPosition);
+                search.setText("/" + enviromentGroup.getName() + "/");
+                search.setSelection(search.getText().length());
 
-                searchText.setText("/" + listDataHeader.get(groupPosition));
 
+                return true;
             }
         });
-
-        // Listview Group collasped listener
-        expListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-
-            @Override
-            public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        listDataHeader.get(groupPosition) + " Collapsed",
-                        Toast.LENGTH_SHORT).show();
-
-                searchText.setText("/");
-            }
-        });
-
-
-        searchText.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2,
-                                      int arg3) {
-                // ((Filter) listAdapter.getFilter()).filter(cs);
-                //NewsFeedActivity.this.listAdapter.getFilter().filter(cs);
-                Log.d("TextWatcher","Textchange");
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1,
-                                          int arg2, int arg3) {
-                // TODO Auto-generated method stub
-                Log.d("TextWatcher","BeforeTextChange");
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-                // When user changed the Text
-                Log.d("TextWatcher","AfterText");
-
-            }
-        });
-
     }
 
+    private void loadSomeData() {
 
-    private void prepareListData() {
-        listDataHeader = new ArrayList<>();
-        listDataChild = new HashMap<>();
+        Animal animal = new Animal("cat");
+        animalList.add(animal);
+        animal = new Animal("dog");
+        animalList.add(animal);
+        animal = new Animal("cow");
+        animalList.add(animal);
 
-        // Adding child data
-        listDataHeader.add("Asia");
-        listDataHeader.add("Europe");
+        Environment environment = new Environment("land", animalList);
+        environmentList.add(environment);
 
-        // Adding child data
-        List<String> asiaCountry = new ArrayList<>();
-        asiaCountry.add("South Korea");
-        asiaCountry.add("Thailand");
-        asiaCountry.add("Laos");
-        asiaCountry.add("China");
+        animalList = new ArrayList<>();
+        animal = new Animal("shark");
+        animalList.add(animal);
+        animal = new Animal("turtle");
+        animalList.add(animal);
+        animal = new Animal("sea Lion");
+        animalList.add(animal);
+        animal = new Animal("clown fish");
+        animalList.add(animal);
+        animal = new Animal("shrimp");
+        animalList.add(animal);
 
-        List<String> europeCountry = new ArrayList<>();
-        europeCountry.add("Sweden");
-        europeCountry.add("Germany");
-        europeCountry.add("Denmark");
-        europeCountry.add("Italy");
-
-        listDataChild.put(listDataHeader.get(0), asiaCountry); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), europeCountry);
+        environment = new Environment("sea", animalList);
+        environmentList.add(environment);
     }
 }

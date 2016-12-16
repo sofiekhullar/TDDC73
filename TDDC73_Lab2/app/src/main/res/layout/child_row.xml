@@ -3,9 +3,12 @@
     android:layout_height="match_parent" android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView android:id="@+id/name" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" android:paddingLeft="35sp"
-        android:paddingRight="10dp"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+    <TextView android:id="@+id/name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingLeft="40sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:background="@drawable/selector_list_item"/>
+
 </RelativeLayout>
