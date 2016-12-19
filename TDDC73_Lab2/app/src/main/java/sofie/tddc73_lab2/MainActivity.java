@@ -32,10 +32,12 @@ public class MainActivity extends Activity {
         //expand all Groups
         expandAll();
 
+        // set the start text for the search field
         search.setText("/");
         search.setSelection(1);
         search.setClickable(true);
 
+        // check if the user clicks on the search field
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,39 +57,33 @@ public class MainActivity extends Activity {
 
             @Override
             public void afterTextChanged(Editable arg0) {
-                if (search.getText().length() == 0) {
+                // if no text in search field always have /
+                if (search.getText().length() == 0 && search.getText().length() == 1) {
                     search.setText("/");
                     search.setSelection(1);
-                }
-
-                if (search.getText().length() == 1) {
                     myList.setItemChecked(index, false);
-                }
 
-                if (clicked) {
-                    if (search.getText().length() == 0) {
-                        search.setText("/");
-                        search.setSelection(1);
-                    }
+                } else if (clicked) {
+
+                    boolean findEnvironment = false;
+                    boolean findAnimal = false;
 
                     String input = search.getText().toString().substring(1);
                     String environment = input;
                     String animal = "";
                     int groupPos;
-                    boolean findEnvironment = false;
-                    boolean findAnimal = false;
 
-
+                    // if the search query contains / split the string
                     if (input.contains("/")) {
                         String[] parts = input.split("/");
                         environment = parts[0];
                         if (parts.length > 1) {
                             environment = parts[0];
                             animal = parts[1];
-                            Log.d("input ", animal + " heading " + parts[0]);
                         }
                     }
 
+                    // first check the group
                     for (int i = 0; i < listAdapter.getGroupCount(); i++) {
                         Environment environmentGroup = environmentList.get(i);
 
@@ -96,17 +92,18 @@ public class MainActivity extends Activity {
                             search.setBackgroundColor(Color.TRANSPARENT);
                             findEnvironment = true;
 
+                            // second check the child
                             for (int j = 0; j < environmentGroup.getAnimalList().size(); j++) {
                                 Animal animalChild = environmentGroup.getAnimalList().get(j);
 
                                 if (animalChild.getName().startsWith(animal) && !animal.equals("")) {
                                     search.setBackgroundColor(Color.TRANSPARENT);
 
+                                    // mark the first correct child
                                     findAnimal = true;
                                     collapseAll(groupPos);
                                     index = myList.getFlatListPosition(ExpandableListView.getPackedPositionForChild(i, j));
                                     myList.setItemChecked(index, true);
-
 
                                     if (animal.contains(animalChild.getName())) {
                                         index = myList.getFlatListPosition(ExpandableListView.getPackedPositionForChild(i, j));
@@ -116,6 +113,7 @@ public class MainActivity extends Activity {
                                 }
                             }
                         }
+                        // if not a environment or animal is found mark it red
                         if (!findAnimal && !animal.equals("")) {
                             search.setBackgroundColor(android.graphics.Color.RED);
                             myList.setItemChecked(index, false);
@@ -151,10 +149,8 @@ public class MainActivity extends Activity {
 
     //method to expand all groups
     private void displayList() {
-
         //display the list
         loadSomeData();
-
         //get reference to the ExpandableListView
         myList = (ExpandableListView) findViewById(R.id.expandableListView);
         //create the adapter by passing your ArrayList data
@@ -190,11 +186,10 @@ public class MainActivity extends Activity {
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 expandAll();
                 clicked = true;
-                //get the group header
-                Environment enviromentGroup = environmentList.get(groupPosition);
-                search.setText("/" + enviromentGroup.getName() + "/");
+                //set the group header
+                Environment environmentGroup = environmentList.get(groupPosition);
+                search.setText("/" + environmentGroup.getName() + "/");
                 search.setSelection(search.getText().length());
-
 
                 return true;
             }

@@ -1,9 +1,5 @@
 package sofie.tddc73_lab2;
 
-/**
- * Created by sofiekhullar on 2016-11-24.
- */
-
 public class Animal {
 
     private String name = "";
