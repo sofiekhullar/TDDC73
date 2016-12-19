@@ -7,10 +7,12 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,17 +47,17 @@ public class Step1 extends AppCompatActivity {
         step1EditTextYYYY = (EditText) findViewById(R.id.step1EditTextNameYYYY);
         step1SpinnerGender = (Spinner) findViewById(R.id.Step1SpinnerGender);
 
-
         step1EditTextName.addTextChangedListener(new TextWatcher() {
-
             public void afterTextChanged(Editable s) {}
-
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //step1InfoButtonName.tint
+                String input = step1EditTextName.getText().toString();
+                // Full name must be longer than 3 letters and contain one space
+                if( input.length() > 2 && input.matches(".*\\s+.*"))
+                {
+                    step1InfoButtonName.setBackgroundResource(R.drawable.info_good);
+                } else  step1InfoButtonName.setBackgroundResource(R.drawable.info_bad);
             }
         });
 
