@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Create account"
-        android:id="@+id/button"
+        android:id="@+id/step2ButtonCreate"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:backgroundTint="#6ff15b" />
@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Previous"
-        android:id="@+id/button4"
+        android:id="@+id/step2ButtonPrev"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:clickable="true" />
@@ -59,10 +59,10 @@
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:ems="10"
-        android:id="@+id/editText8"
+        android:id="@+id/step2EditTextUsername"
         android:layout_below="@+id/textView13"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/button" />
+        android:layout_alignEnd="@+id/step2ButtonCreate" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Password"
         android:id="@+id/textView14"
-        android:layout_below="@+id/editText8"
+        android:layout_below="@+id/step2EditTextUsername"
         android:layout_alignParentStart="true" />
 
     <EditText
@@ -78,7 +78,7 @@
         android:layout_height="wrap_content"
         android:inputType="textPostalAddress"
         android:ems="10"
-        android:id="@+id/editText9"
+        android:id="@+id/step2EditTextPassword1"
         android:layout_below="@+id/textView14"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
@@ -89,7 +89,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Repeat password"
         android:id="@+id/textView15"
-        android:layout_below="@+id/editText9"
+        android:layout_below="@+id/step2EditTextPassword1"
         android:layout_alignParentStart="true" />
 
     <EditText
@@ -100,6 +100,7 @@
         android:id="@+id/editText10"
         android:layout_below="@+id/textView15"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/button" />
+        android:layout_alignEnd="@+id/step2ButtonCreate"
+        android:text="step2EditTextPassword2" />
 
 </RelativeLayout>
