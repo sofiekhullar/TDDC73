@@ -43,7 +43,7 @@
         android:id="@+id/step1EditTextEmail"
         android:layout_below="@+id/textView3"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/step1EditTextName" />
+        android:layout_alignEnd="@+id/step1EditTextName"/>
 
     <Spinner
         android:layout_width="wrap_content"
