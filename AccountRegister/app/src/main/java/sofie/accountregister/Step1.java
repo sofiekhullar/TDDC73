@@ -1,14 +1,7 @@
 package sofie.accountregister;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,8 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,9 +77,11 @@ public class Step1 extends AppCompatActivity {
         });
 
         step1EditTextEmail.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
 
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String input = step1EditTextEmail.getText().toString();
@@ -102,13 +95,12 @@ public class Step1 extends AppCompatActivity {
                         part1 = parts[0];
                         part2 = parts[1];
                         Log.d("email", part1 + ", " + part2);
-                        if(part2.contains(".")){
+                        if (part2.contains(".")) {
                             String[] parts2 = input.split(".");
                             if (parts.length > 1) {
                                 step1InfoButtonEmail.setBackgroundResource(R.drawable.info_good);
                                 checkEmail = true;
-                            }
-                            else {
+                            } else {
                                 step1InfoButtonEmail.setBackgroundResource(R.drawable.info_bad);
                                 checkEmail = false;
                             }
@@ -116,11 +108,11 @@ public class Step1 extends AppCompatActivity {
                             step1InfoButtonEmail.setBackgroundResource(R.drawable.info_bad);
                             checkEmail = false;
                         }
-                    } else  {
+                    } else {
                         step1InfoButtonEmail.setBackgroundResource(R.drawable.info_bad);
                         checkEmail = false;
                     }
-                } else  {
+                } else {
                     step1InfoButtonEmail.setBackgroundResource(R.drawable.info_bad);
                     checkEmail = false;
                 }
@@ -138,9 +130,25 @@ public class Step1 extends AppCompatActivity {
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String input = step1EditTextDD.getText().toString();
-                if (input.length() == 2 && android.text.TextUtils.isDigitsOnly(input)) {
-                    checkDD = true;
-                } else checkDD = false;
+
+                if (input.length() == 2)
+                {
+                    String[] parts = {input.substring(0, 1),input.substring(1)};
+                    Log.d("PARTS", parts[0] + " " + parts[1]);
+                    int first = Integer.parseInt(parts[0]);
+                    int second = Integer.parseInt(parts[1]);
+
+                    if(first < 3 || first == 3 && second == 0 || first == 3 && second == 1){
+                         checkDD = true;
+                    }
+                    else{
+                        checkDD = false;
+                    }
+                }
+                else
+                {
+                    checkDD = false;
+                }
                 checkDate();
             }
         });
@@ -154,9 +162,21 @@ public class Step1 extends AppCompatActivity {
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String input = step1EditTextMM.getText().toString();
-                if (input.length() == 2 && android.text.TextUtils.isDigitsOnly(input)) {
-                   checkMM = true;
-                } else checkMM = false;
+
+                if (input.length() == 2) {
+                    String[] parts = {input.substring(0, 1), input.substring(1)};
+                    Log.d("PARTS", parts[0] + " " + parts[1]);
+                    int first = Integer.parseInt(parts[0]);
+                    int second = Integer.parseInt(parts[1]);
+
+                    if (first < 1 || first == 1 && second <= 2) {
+                        checkMM = true;
+                    } else {
+                        checkMM = false;
+                    }
+                } else {
+                    checkMM = false;
+                }
                 checkDate();
             }
         });
@@ -171,21 +191,38 @@ public class Step1 extends AppCompatActivity {
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String input = step1EditTextYYYY.getText().toString();
-                if (input.length() == 4 && android.text.TextUtils.isDigitsOnly(input)) {
-                    checkYYYY = true;
-                } else checkYYYY = false;
-                checkDate();
-            }
-        });
+
+                if (input.length() == 4) {
+                    String[] parts = {input.substring(0, 1), input.substring(1, 2), input.substring(2, 3), input.substring(3, 4)};
+                    Log.d("PARTS", parts[0] + " " + parts[1] + " " + parts[2] + " " + parts[3]);
+                    int first = Integer.parseInt(parts[0]);
+                    int second = Integer.parseInt(parts[1]);
+                    int thrid = Integer.parseInt(parts[2]);
+                    int fourth = Integer.parseInt(parts[3]);
+
+                    if (first == 1 && second == 9 || first == 2 && second == 0) {
+                        checkYYYY = true;
+                    }
+                    else {
+                        checkYYYY = false;
+                    }
+                }
+                else
+                {
+                    checkYYYY = false;
+                }
+            checkDate();
+        }
+    });
 
 
         step1ButtonCreate.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 Intent myIntent = new Intent(Step1.this, Step2.class);
-                 Step1.this.startActivity(myIntent);
-             }
-         });
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(Step1.this, Step2.class);
+                Step1.this.startActivity(myIntent);
+            }
+        });
 
         step1ButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,13 +252,13 @@ public class Step1 extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapter, View v,
                                        int position, long id) {
-                if (position != 0 && firstClick) {
-                    String hej = adapter.getItemAtPosition(position).toString();
-                    // Showing selected spinner item
+                if (position != 0 && firstClick)
+                {
                     step1InfoButtonGender.setBackgroundResource(R.drawable.info_good);
                     checkGender = true;
                 }
-                if (position == 0 && firstClick) {
+                else if (position == 0 && firstClick)
+                {
                     step1InfoButtonGender.setBackgroundResource(R.drawable.info_bad);
                     checkGender = false;
                 }
@@ -236,10 +273,14 @@ public class Step1 extends AppCompatActivity {
         });
     }
     public void checkDate(){
-        if(checkDD && checkMM && checkYYYY){
+        Log.d("ready", String.valueOf(checkDD + " " + checkMM + " " + checkYYYY));
+        if(checkDD && checkMM && checkYYYY)
+        {
             checkDate = true;
             step1InfoButtonDate.setBackgroundResource(R.drawable.info_good);
-        } else {
+        }
+        else
+        {
             step1InfoButtonDate.setBackgroundResource(R.drawable.info_bad);
             checkDate = false;
         }
@@ -247,7 +288,7 @@ public class Step1 extends AppCompatActivity {
     }
 
     public void readyToMoveOn(){
-        Log.d("ready", String.valueOf(checkDate + " " + checkName + " " + checkEmail + " " + checkGender));
+       // Log.d("ready", String.valueOf(checkDate + " " + checkName + " " + checkEmail + " " + checkGender));
 
         if(checkDate && checkName && checkEmail && checkGender){
 
