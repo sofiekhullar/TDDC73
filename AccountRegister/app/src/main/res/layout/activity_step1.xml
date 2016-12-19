@@ -58,7 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Next step"
-        android:id="@+id/step2ButtonCreate"
+        android:id="@+id/step1ButtonCreate"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:backgroundTint="#6ff15b" />
@@ -71,7 +71,7 @@
         android:id="@+id/textView"
         android:paddingBottom="30px"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/step2ButtonCreate" />
+        android:layout_toStartOf="@+id/step1ButtonCreate" />
 
     <TextView
         android:layout_width="wrap_content"
