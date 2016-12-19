@@ -97,10 +97,9 @@
         android:layout_height="wrap_content"
         android:inputType="textPostalAddress"
         android:ems="10"
-        android:id="@+id/editText10"
+        android:id="@+id/step2EditTextPassword2"
         android:layout_below="@+id/textView15"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/step2ButtonCreate"
-        android:text="step2EditTextPassword2" />
+        android:layout_alignEnd="@+id/step2ButtonCreate" />
 
 </RelativeLayout>
