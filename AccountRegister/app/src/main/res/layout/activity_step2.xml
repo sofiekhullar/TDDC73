@@ -101,4 +101,28 @@
         android:layout_alignParentBottom="true"
         android:layout_toEndOf="@+id/textView6" />
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/step2InfoButtonUser"
+        android:background="@drawable/info"
+        android:layout_alignTop="@+id/step2EditTextUsername"
+        android:layout_alignEnd="@+id/step2EditTextUsername" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/step2InfoButtonPassword1"
+        android:background="@drawable/info"
+        android:layout_alignTop="@+id/step2EditTextPassword1"
+        android:layout_alignEnd="@+id/step2EditTextPassword1" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/step2InfoButtonPassword2"
+        android:background="@drawable/info"
+        android:layout_centerVertical="true"
+        android:layout_alignEnd="@+id/step2EditTextPassword2" />
+
 </RelativeLayout>
