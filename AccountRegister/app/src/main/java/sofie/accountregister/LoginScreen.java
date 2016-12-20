@@ -25,6 +25,8 @@ public class LoginScreen extends AppCompatActivity {
         loginEditTextUsername = (EditText) findViewById(R.id.loginEditTestUsername);
         loginEditTextPassword = (EditText) findViewById(R.id.loginEditTextPass);
 
+        loginButton.setEnabled(false);
+
         loginRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

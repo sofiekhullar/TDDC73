@@ -65,22 +65,6 @@ public class Step2 extends AppCompatActivity {
             }
         });
 
-//        step2EditTextPassword1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                AlertDialog alertDialog = new AlertDialog.Builder(Step2.this).create();
-//                alertDialog.setTitle("Set Password");
-//                alertDialog.setMessage("Password needs to contain at least 6 characters");
-//                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                dialog.dismiss();
-//                            }
-//                        });
-//                alertDialog.show();
-//            }
-//        });
-
         step2EditTextUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

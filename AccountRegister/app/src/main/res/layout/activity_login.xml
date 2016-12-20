@@ -11,11 +11,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Welcome!"
+        android:text="Welcome to Seoul!"
         android:id="@+id/textView5"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:textSize="50sp"/>
+        android:textSize="40sp"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -32,7 +32,8 @@
         android:ems="10"
         android:id="@+id/loginEditTextPass"
         android:layout_centerVertical="true"
-        android:layout_alignStart="@+id/textView10" />
+        android:layout_alignStart="@+id/textView10"
+        android:layout_alignEnd="@+id/loginEditTestUsername" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -58,8 +59,8 @@
         android:text="Login"
         android:id="@+id/loginButton"
         android:layout_below="@+id/loginEditTextPass"
-        android:layout_alignStart="@+id/loginEditTextPass"
-        android:layout_alignEnd="@+id/loginEditTextPass" />
+        android:layout_alignEnd="@+id/textView8"
+        android:layout_alignStart="@+id/textView8" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -76,7 +77,15 @@
         android:text="Create account"
         android:id="@+id/createButton"
         android:layout_below="@+id/loginButton"
-        android:layout_alignStart="@+id/textView9"
-        android:layout_alignEnd="@+id/loginButton" />
+        android:layout_alignEnd="@+id/loginButton"
+        android:layout_alignStart="@+id/loginButton" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:background="@drawable/seoul_sky"
+        android:layout_below="@+id/createButton"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
