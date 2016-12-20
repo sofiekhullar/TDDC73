@@ -90,14 +90,14 @@ public class Step2 extends AppCompatActivity {
                 // on to the next page
                 if(step2EditTextUsername.getText().toString().length() > 0)
                 {
-                    step2UsernameImageButton.setBackgroundResource(R.drawable.info_good);
+                    step2UsernameImageButton.setBackgroundResource(R.drawable.check_good);
                     checkUsername = true;
                     readyToMoveOn();
                 }
                 // if the field is empty then change the icon to let the user know it's not filled out correctly
                 else
                 {
-                    step2UsernameImageButton.setBackgroundResource(R.drawable.info_bad);
+                    step2UsernameImageButton.setBackgroundResource(R.drawable.check_bad);
                     checkUsername = false;
                     readyToMoveOn();
                 }
@@ -151,19 +151,19 @@ public class Step2 extends AppCompatActivity {
                     }
                 }
                 else{
-                    step2PasswordImageButton1.setBackgroundResource(R.drawable.info_bad);
+                    step2PasswordImageButton1.setBackgroundResource(R.drawable.check_bad);
                     checkPassword1 = false;
                     readyToMoveOn();
                 }
 
                 if(password.equals(step2EditTextPassword2.getText().toString()))
                 {
-                    step2PasswordImageButton2.setBackgroundResource(R.drawable.info_good);
+                    step2PasswordImageButton2.setBackgroundResource(R.drawable.check_good);
                     checkPassword2 = true;
                     readyToMoveOn();
                 }
                 else{
-                    step2PasswordImageButton2.setBackgroundResource(R.drawable.info_bad);
+                    step2PasswordImageButton2.setBackgroundResource(R.drawable.check_bad);
                     checkPassword2 = false;
                     readyToMoveOn();
                 }
@@ -187,12 +187,12 @@ public class Step2 extends AppCompatActivity {
 
                 if(step2EditTextPassword1.getText().toString().equals(step2EditTextPassword2.getText().toString()) && step2EditTextPassword2.getText().toString().length() > 5)
                 {
-                    step2PasswordImageButton2.setBackgroundResource(R.drawable.info_good);
+                    step2PasswordImageButton2.setBackgroundResource(R.drawable.check_good);
                     checkPassword2 = true;
                     readyToMoveOn();
                 }
                 else{
-                    step2PasswordImageButton2.setBackgroundResource(R.drawable.info_bad);
+                    step2PasswordImageButton2.setBackgroundResource(R.drawable.check_bad);
                     checkPassword2 = false;
                     readyToMoveOn();
                 }
