@@ -16,9 +16,7 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by sofiekhullar on 2016-12-19.
- */
+
 public class Step1 extends AppCompatActivity {
 
     // Step1
@@ -288,10 +286,7 @@ public class Step1 extends AppCompatActivity {
     }
 
     public void readyToMoveOn(){
-       // Log.d("ready", String.valueOf(checkDate + " " + checkName + " " + checkEmail + " " + checkGender));
-
         if(checkDate && checkName && checkEmail && checkGender){
-
             step1ButtonCreate.setEnabled(true);
         }
     }

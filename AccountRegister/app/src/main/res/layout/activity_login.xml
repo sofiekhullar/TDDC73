@@ -13,9 +13,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Welcome to Seoul!"
         android:id="@+id/textView5"
+        android:textSize="30sp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="40sp"/>
+        android:layout_alignEnd="@+id/textView8"
+        android:layout_marginTop="30dp"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -42,7 +43,7 @@
         android:text="Username"
         android:id="@+id/textView9"
         android:layout_above="@+id/loginEditTestUsername"
-        android:layout_alignEnd="@+id/textView10" />
+        android:layout_alignStart="@+id/loginEditTestUsername" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -60,7 +61,7 @@
         android:id="@+id/loginButton"
         android:layout_below="@+id/loginEditTextPass"
         android:layout_alignEnd="@+id/textView8"
-        android:layout_alignStart="@+id/textView8" />
+        android:layout_alignStart="@+id/loginEditTextPass" />
 
     <TextView
         android:layout_width="wrap_content"
