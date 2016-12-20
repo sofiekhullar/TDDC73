@@ -197,7 +197,7 @@ public class MainActivity extends Activity {
     }
 
     private void loadSomeData() {
-
+        // init the list
         Animal animal = new Animal("cat");
         animalList.add(animal);
         animal = new Animal("dog");
