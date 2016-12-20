@@ -19,7 +19,7 @@ import android.widget.TextView;
  */
 public class Step2 extends AppCompatActivity {
 
-    // Step2
+    // Variable declarations
     Button step2ButtonCreate, step2ButtonPrev;
     EditText step2EditTextUsername, step2EditTextPassword1, step2EditTextPassword2;
     ImageButton step2UsernameImageButton, step2PasswordImageButton1, step2PasswordImageButton2;
@@ -35,7 +35,7 @@ public class Step2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step2);
 
-        // Step2
+        // Connect variables to the right component
         step2ButtonCreate = (Button) findViewById(R.id.step2ButtonCreate);
         step2ButtonPrev = (Button) findViewById(R.id.step2ButtonPrev);
         step2EditTextUsername = (EditText) findViewById(R.id.step2EditTextUsername);
@@ -46,9 +46,11 @@ public class Step2 extends AppCompatActivity {
         step2UsernameImageButton = (ImageButton) findViewById(R.id.step2InfoButtonUser);
         step2PasswordStrength = (TextView) findViewById(R.id.step2PasswordStrength);
 
+        // make it impossible to move on to the next page
         step2ButtonCreate.setClickable(false);
         step2ButtonCreate.setTextColor(Color.GRAY);
 
+        // add onclicklisterner to the create button. If pressed then start new activity
         step2ButtonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,6 +59,7 @@ public class Step2 extends AppCompatActivity {
             }
         });
 
+        // add onclicklistener to the previous button so it lets you go back to the previous page
         step2ButtonPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,6 +68,7 @@ public class Step2 extends AppCompatActivity {
             }
         });
 
+        // add textchangedlistener to username field so it is possible to see if somethings written there
         step2EditTextUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -81,12 +85,16 @@ public class Step2 extends AppCompatActivity {
 
                 username = step2EditTextUsername.getText().toString();
 
+                // if something is written in the username field then change the icon on the right
+                // and check if all fields are filled out correctly and see if it is possible to move
+                // on to the next page
                 if(step2EditTextUsername.getText().toString().length() > 0)
                 {
                     step2UsernameImageButton.setBackgroundResource(R.drawable.check_good);
                     checkUsername = true;
                     readyToMoveOn();
                 }
+                // if the field is empty then change the icon to let the user know it's not filled out correctly
                 else
                 {
                     step2UsernameImageButton.setBackgroundResource(R.drawable.check_bad);
@@ -96,6 +104,9 @@ public class Step2 extends AppCompatActivity {
             }
         });
 
+        // add textChangeListener to see what is written in the password field. Make sure it is longer than six characters.
+        // If it meets all demands then change the icon on the right and see if it is possible to move on.
+        // Depending on how strong the password is according to the algorithm write out different strings.
         step2EditTextPassword1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -117,6 +128,7 @@ public class Step2 extends AppCompatActivity {
                     checkPassword1 = true;
                     readyToMoveOn();
 
+                    // change tet color and string depending on password strength
                     if(passwordStrength < 20)
                     {
                         step2PasswordStrength.setText("WEAK");
@@ -188,6 +200,7 @@ public class Step2 extends AppCompatActivity {
         });
     }
 
+    // Check if all fields are filled out correctly. If so then make it possible to click the create button
     public void readyToMoveOn() {
 
         if (checkPassword1 && checkUsername && checkPassword2)
@@ -206,14 +219,17 @@ public class Step2 extends AppCompatActivity {
 
     public boolean passwordCheck(String password){
 
+        // make sure the password meets the required length
         if(password.length() < 6)
             return false;
 
+        // declare variables that will determine password strength
         int lowerCase = 0;
         int upperCase = 0;
         int digits = 0;
         int special = 0;
 
+        // loop through the password and count how many of the different kinds of characters are in it
         for (int i = 0; i < password.length(); i++) {
 
             char ch = password.charAt(i);
@@ -228,6 +244,8 @@ public class Step2 extends AppCompatActivity {
                 special = special + 1;
         }
 
+        // the ultimate password strength algorithm to check how secure it is.
+        // Nothing big really, just multiply everything. Works perfectly.
         passwordStrength = (lowerCase + 1) * (upperCase + 1) * (digits + 1) * (special + 1);
 
         return true;
