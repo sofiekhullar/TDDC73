@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Environment {
 
     private String name;
-    private ArrayList<Animal> animalList = new ArrayList<Animal>();
+    private ArrayList<Animal> animalList = new ArrayList<>();
 
     public Environment(String name, ArrayList<Animal> animalList) {
         super();

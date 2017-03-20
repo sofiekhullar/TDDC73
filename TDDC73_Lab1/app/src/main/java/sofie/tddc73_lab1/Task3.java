@@ -12,9 +12,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-/**
- * Created by sofiekhullar on 2016-11-17.
- */
 public class Task3 extends AppCompatActivity {
 
     @Override

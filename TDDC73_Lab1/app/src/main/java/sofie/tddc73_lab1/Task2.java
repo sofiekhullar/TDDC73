@@ -15,9 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-/**
- * Created by sofiekhullar on 2016-11-08.
- */
 public class Task2  extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
